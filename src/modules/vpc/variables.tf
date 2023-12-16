@@ -1,9 +1,7 @@
-variable "vpc-public-cidr" {
-  description = "The address range of the public VPC"
-  type        = string
-}
-
-variable "vpc-private-cidr" {
-  description = "The address range of the private VPC"
-  type        = string
+variable "vpcs" {
+  description = "The VPCs to create"
+  type = list(object({
+    cidr_block : string
+    is_public : bool
+  }))
 }

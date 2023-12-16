@@ -1,11 +1,12 @@
 module "vpc" {
-  source           = "./modules/vpc"
-  vpc-public-cidr  = var.vpc-public-cidr
-  vpc-private-cidr = var.vpc-private-cidr
+  source = "./modules/vpc"
+  vpcs   = local.vpcs
 }
 
 module "subnets" {
-  source = "./modules/subnets"
+  source  = "./modules/subnets"
+  subnets = local.subnets
+  vpc_ids = module.vpc.vpc_ids
 }
 
 module "nat-gateway" {
