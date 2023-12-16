@@ -1,7 +1,10 @@
-resource "aws_vpc" "vpc-public" {
-  cidr_block = var.vpc-public-cidr
-}
+resource "aws_vpc" "vpc" {
+  count                = length(var.vpcs)
+  cidr_block           = var.vpcs[count.index].cidr_block
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
-resource "aws_vpc" "vpc-private" {
-  cidr_block = var.vpc-private-cidr
+  tags = {
+    Name = "vpc-${var.vpcs[count.index].is_public ? "public" : "private"}"
+  }
 }
