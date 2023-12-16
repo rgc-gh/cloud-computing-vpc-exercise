@@ -35,3 +35,4 @@ terraform.rc
 
 # Ignore draw.io files
 *.drawio*.bkp
+*.drawio*.dtmp
