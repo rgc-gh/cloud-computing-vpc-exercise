@@ -10,6 +10,16 @@ variable "vpc_count" {
   default     = 2
 }
 
+variable "availability_zones_count" {
+  type    = number
+  default = 2
+}
+
+variable "subnets_count" {
+  type    = number
+  default = 2
+}
+
 variable "cidr" {
   description = "VPC CIDR blocks"
   type = object({
@@ -20,14 +30,4 @@ variable "cidr" {
     block_spec = "10.%d.0.0/16"
     increment  = 10
   }
-}
-
-variable "availability_zones_count" {
-  type    = number
-  default = 2
-}
-
-variable "subnets_count" {
-  type    = number
-  default = 2
 }
