@@ -7,38 +7,38 @@ locals {
 }
 
 locals {
-  # The VPCs and subnets of the infrastructure.
-  vpcs_with_subnets = [
+  # The VPCs of the infrastructure.
+  vpcs = [
     {
       cidr_block = local.cidr_blocks[0]
-      is_public  = true,
-      subnets = flatten([
-        for i in range(min(var.availability_zones_count, length(data.aws_availability_zones.available.names))) : [
-          for j in range(var.subnets_count) : {
-            vpc_index         = 0
-            cidr_block        = cidrsubnet(local.cidr_blocks[0], local.newbits, j + (var.subnets_count * i))
-            availability_zone = data.aws_availability_zones.available.names[i]
-            is_public         = j == 0
-          }
-        ]
-      ])
+      is_public  = true
     },
     {
       cidr_block = local.cidr_blocks[1]
-      is_public  = false,
-      subnets = [
-        {
-          vpc_index         = 1
-          cidr_block        = cidrsubnet(local.cidr_blocks[1], local.newbits, 0)
-          availability_zone = data.aws_availability_zones.available.names[0]
-          is_public         = false
-        }
-      ]
+      is_public  = false
     }
   ]
-  vpcs = [for vpc in local.vpcs_with_subnets : {
-    cidr_block = vpc.cidr_block
-    is_public  = vpc.is_public
-  }]
-  subnets = concat([for vpc in local.vpcs_with_subnets : vpc.subnets]...)
+}
+
+locals {
+  # The subnets of the infrastructure by VPC.
+  subnets_vpc_public = flatten([
+    for i in range(min(var.availability_zones_count, length(data.aws_availability_zones.available.names))) : [
+      for j in range(var.subnets_count) : {
+        vpc_index         = 0
+        cidr_block        = cidrsubnet(local.cidr_blocks[0], local.newbits, j + (var.subnets_count * i))
+        availability_zone = data.aws_availability_zones.available.names[i]
+        is_public         = j == 0
+      }
+    ]
+  ])
+  subnets_vpc_private = [
+    {
+      vpc_index         = 1
+      cidr_block        = cidrsubnet(local.cidr_blocks[1], local.newbits, 0)
+      availability_zone = data.aws_availability_zones.available.names[0]
+      is_public         = false
+    }
+  ]
+  subnets = concat(local.subnets_vpc_public, local.subnets_vpc_private)
 }

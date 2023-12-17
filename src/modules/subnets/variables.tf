@@ -4,7 +4,8 @@ variable "subnets" {
     vpc_index : number
     cidr_block : string
     availability_zone : string
-    is_public : bool
+    igw_id : number
+    nat_id : number
   }))
 }
 
