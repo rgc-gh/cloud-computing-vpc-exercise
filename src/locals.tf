@@ -42,4 +42,3 @@ locals {
   }]
   subnets = concat([for vpc in local.vpcs_with_subnets : vpc.subnets]...)
 }
-
