@@ -8,7 +8,7 @@ The second VPC should be able to ping one of the private subnets of the first VP
 
 ## Architecture
 
-![architecture](./diagrams/architecture.drawio.png "Architecture").
+![architecture](./diagrams/architecture.drawio.png "Architecture")
 
 ## Usage
 
