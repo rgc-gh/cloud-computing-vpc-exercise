@@ -10,10 +10,10 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "inbound_cidr_block" {
-  description = "CIDR block allowed for inbound connections to the EC2 instances."
-  type        = string
-  default     = "0.0.0.0/0"
+variable "inbound_cidr_blocks" {
+  description = "CIDR blocks allowed for inbound connections to the EC2 instances."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
 }
 
 # EC2 Instances

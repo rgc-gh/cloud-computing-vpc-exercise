@@ -29,7 +29,7 @@ variable "instance_type" {
 }
 
 variable "inbound_cidr_block" {
-  description = "CIDR blocks allowed for inbound connections to the EC2 instances."
+  description = "CIDR block allowed for inbound connections to the EC2 instances."
   type        = string
   default     = "0.0.0.0/0"
 }

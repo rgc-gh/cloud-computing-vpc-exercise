@@ -8,19 +8,19 @@ variable "peer_vpc_id" {
   type        = string
 }
 
-variable "vpc_id" {
+variable "requester_vpc_id" {
   description = "The ID of the requester VPC."
   type        = string
 }
 
-variable "vpc_route_table_id" {
-  description = "The route table ID of the requester VPC."
-  type        = string
+variable "route_table_ids" {
+  description = "The route table IDs to associate to a route by route index."
+  type        = list(string)
 }
 
-variable "peer_vpc_cidr_block" {
-  description = "The CIDR block ID of the peer VPC."
-  type        = string
+variable "cidr_blocks" {
+  description = "The CIDR blocks to associated to a route by route index."
+  type        = list(string)
 }
 
 # Metadata

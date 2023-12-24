@@ -19,7 +19,7 @@ locals {
 
   public_vpc_public_subnet_cidr_blocks   = [for i in local.public_subnets_range : cidrsubnet(local.public_vpc_cidr_block, local.newbits, i)]
   public_vpc_private_subnet_cidr_blocks  = [for i in local.private_subnets_range : cidrsubnet(local.public_vpc_cidr_block, local.newbits, i)]
-  private_vpc_private_subnet_cidr_blocks = [cidrsubnet(local.private_vpc_cidr_block, local.newbits, local.subnets_total_half)]
+  private_vpc_isolated_subnet_cidr_block = cidrsubnet(local.private_vpc_cidr_block, local.newbits, local.subnets_total_half)
 }
 
 locals {
