@@ -21,7 +21,7 @@ resource "aws_security_group" "this" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.inbound_cidr_block]
+    cidr_blocks = var.inbound_cidr_blocks
   }
 
   ingress {
@@ -29,7 +29,7 @@ resource "aws_security_group" "this" {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
-    cidr_blocks = [var.inbound_cidr_block]
+    cidr_blocks = var.inbound_cidr_blocks
   }
 
   egress {
