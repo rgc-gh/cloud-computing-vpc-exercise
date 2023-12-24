@@ -1,3 +1,4 @@
+# VPCs
 module "public_vpc" {
   source = "./modules/vpc"
 
@@ -28,17 +29,51 @@ module "private_vpc" {
   tags = local.tags
 }
 
-# 
-# data.aws_ami.ubuntu.id
+# EC2 Instances
+module "public_ec2" {
+  source = "./modules/ec2"
 
-# <<EOF
-# #!/bin/bash
-# # User configuration
-# usermod -c ${var.system_user} -l ${var.system_user} -d /home/${var.system_user} -m ${var.system_default_user} && groupmod -n ${var.system_user} ${var.system_default_user};
-# echo "${var.system_user} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-cloud-init-users
-# curl -sq https://github.com/${var.github_user}.keys | tee -a /home/${var.system_user}/.ssh/authorized_keys
-# # Package installation
-# sudo apt update
-# sudo apt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common jq docker.io cgroup-tools tree
-# usermod -aG docker ${var.system_user}
-# EOF
+  public_key_path = var.public_key_path
+
+  vpc_id             = module.public_vpc.id
+  inbound_cidr_block = var.inbound_cidr_block
+
+  name_suffix                 = "public"
+  ami                         = data.aws_ami.ubuntu.id
+  associate_public_ip_address = true
+  instance_type               = var.instance_type
+  subnet_id                   = module.public_vpc.public_subnet_ids[1]
+
+  tags = local.tags
+}
+
+module "private_ec2" {
+  source = "./modules/ec2"
+
+  public_key_path = var.public_key_path
+
+  vpc_id             = module.public_vpc.id
+  inbound_cidr_block = local.public_vpc_public_subnet_cidr_blocks[1]
+
+  name_suffix   = "private"
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  subnet_id     = module.public_vpc.private_subnet_ids[1]
+
+  tags = local.tags
+}
+
+module "isolated_ec2" {
+  source = "./modules/ec2"
+
+  public_key_path = var.public_key_path
+
+  vpc_id = module.private_vpc.id
+
+  name_suffix   = "isolated"
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  subnet_id     = module.private_vpc.isolated_subnet_ids[0]
+
+  tags = local.tags
+}

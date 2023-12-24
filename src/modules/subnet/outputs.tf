@@ -1,9 +1,9 @@
-output "subnet_id" {
+output "id" {
   description = "The ID of the subnet."
   value       = aws_subnet.this.id
 }
 
-output "subnet_name" {
+output "name" {
   description = "The name of the subnet."
   value       = aws_subnet.this.tags["Name"]
 }
