@@ -1,7 +1,10 @@
-resource "aws_internet_gateway" "internet_gateways" {
-  count  = length(var.vpcs)
-  vpc_id = var.vpcs[count.index].id
-  tags = {
-    Name = "igw-${var.vpcs[count.index].name}"
-  }
+resource "aws_internet_gateway" "this" {
+  vpc_id = var.vpc_id
+
+  tags = merge(
+    {
+      Name = "igw-${var.name_suffix}"
+    },
+    var.tags
+  )
 }

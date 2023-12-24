@@ -1,3 +1,4 @@
-output "ids" {
-  value = [for internet_gateway in aws_internet_gateway.internet_gateways : internet_gateway.id]
+output "internet_gateway_id" {
+  description = "The ID of the internet gateway."
+  value       = aws_internet_gateway.this.id
 }
