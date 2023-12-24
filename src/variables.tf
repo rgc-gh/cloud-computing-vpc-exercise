@@ -16,3 +16,20 @@ variable "cidr_block_increment" {
   type        = number
   default     = 10
 }
+
+variable "public_key_path" {
+  description = "The path to the public key to connect via SSH to the EC2 instances"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "The type of the EC2 instance."
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "inbound_cidr_block" {
+  description = "CIDR blocks allowed for inbound connections to the EC2 instances."
+  type        = string
+  default     = "0.0.0.0/0"
+}

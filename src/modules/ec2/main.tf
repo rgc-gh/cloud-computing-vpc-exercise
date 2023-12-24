@@ -1,6 +1,19 @@
+# Key Pairs
+resource "aws_key_pair" "this" {
+  key_name   = "key-${var.name_suffix}"
+  public_key = file(var.public_key_path)
+
+  tags = merge(
+    {
+      Name = "key-${var.name_suffix}"
+    },
+    var.tags
+  )
+}
+
+# Security Groups
 resource "aws_security_group" "this" {
-  name        = "sg-${var.name_suffix}"
-  description = "Security group that allows SSH inbound and all outbound."
+  description = "Security group that allows SSH and ICMP inbound and all outbound."
   vpc_id      = var.vpc_id
 
   ingress {
@@ -8,7 +21,15 @@ resource "aws_security_group" "this" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.inbound_cidr_block]
+  }
+
+  ingress {
+    description = "ICMP (ping)"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = [var.inbound_cidr_block]
   }
 
   egress {
@@ -30,11 +51,14 @@ resource "aws_security_group" "this" {
   )
 }
 
-resource "aws_instance" "instance" {
-  ami                    = var.ami
-  instance_type          = var.instance_type
+resource "aws_instance" "this" {
+  ami                         = var.ami
+  associate_public_ip_address = var.associate_public_ip_address
+  instance_type               = var.instance_type
+
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.this.id]
+  key_name               = aws_key_pair.this.key_name
 
   user_data = var.user_data
 
