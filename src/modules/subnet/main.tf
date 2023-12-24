@@ -1,29 +1,42 @@
-# Subnets
-resource "aws_subnet" "subnets" {
-  count                   = length(local.subnets)
-  vpc_id                  = local.subnets[count.index].vpc_id
-  cidr_block              = local.subnets[count.index].cidr_block
-  availability_zone       = local.subnets[count.index].availability_zone
-  map_public_ip_on_launch = local.subnets[count.index].map_public_ip_on_launch
+# Subnet
+resource "aws_subnet" "this" {
+  vpc_id                  = var.vpc_id
+  cidr_block              = var.cidr_block
+  availability_zone       = var.availability_zone
+  map_public_ip_on_launch = var.map_public_ip_on_launch
 
-  tags = {
-    Name = "subnet-${local.subnets[count.index].tier}-${local.subnets[count.index].availability_zone}"
-    Tier = local.subnets[count.index].tier
-  }
+  tags = merge(
+    {
+      Name = "subnet-${var.name_suffix}"
+    },
+    var.tags
+  )
 }
 
-# Route Tables
-resource "aws_route_table" "route_tables" {
-  count  = length(local.subnets)
-  vpc_id = local.subnets[count.index].vpc_id
+# Route Table
+resource "aws_route_table" "this" {
+  vpc_id = var.vpc_id
 
-  tags = {
-    Name = "rt-${local.subnets[count.index].tier}-${local.subnets[count.index].availability_zone}"
-  }
+  tags = merge(
+    {
+      Name = "rt-${var.name_suffix}"
+    },
+    var.tags
+  )
 }
 
-resource "aws_route_table_association" "route_table_associations" {
-  count          = length(local.subnets)
-  subnet_id      = aws_subnet.subnets[count.index].id
-  route_table_id = aws_route_table.route_tables[count.index].id
+resource "aws_route_table_association" "this" {
+  subnet_id      = aws_subnet.this.id
+  route_table_id = aws_route_table.this.id
+}
+
+# NAT Gateways
+module "nat_gateways" {
+  source = "../nat_gateway"
+  count  = var.with_nat_gateway ? 1 : 0
+
+  name_suffix = format(aws_subnet.this.tags["Name"])
+  subnet_id   = aws_subnet.this.id
+
+  tags = var.tags
 }

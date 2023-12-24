@@ -1,3 +1,4 @@
-output "ids" {
-  value = [for nat_gateway in aws_nat_gateway.nat_gateways : nat_gateway.id]
+output "nat_gateway_id" {
+  description = "The ID of the NAT gateway."
+  value       = aws_nat_gateway.this.id
 }

@@ -1,6 +1,9 @@
-output "vpcs" {
-  value = [for vpc in aws_vpc.vpcs : {
-    id   = vpc.id
-    name = vpc.tags["Name"]
-  }]
+output "vpc_id" {
+  description = "The ID of the VPC."
+  value       = aws_vpc.this.id
+}
+
+output "vpc_name" {
+  description = "The name of the VPC."
+  value       = aws_vpc.this.tags["Name"]
 }
