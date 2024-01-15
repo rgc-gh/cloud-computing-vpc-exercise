@@ -91,16 +91,16 @@ module "vpc_peering" {
   requester_vpc_id = module.private_vpc.id
 
   route_table_ids = [
-    module.public_vpc.main_route_table_id,
-    module.private_vpc.main_route_table_id,
     module.public_vpc.public_subnet_route_table_ids[1],
-    module.private_vpc.isolated_subnet_route_table_ids[0]
+    module.private_vpc.isolated_subnet_route_table_ids[0],
+    module.public_vpc.private_subnet_route_table_ids[0],
+    module.private_vpc.isolated_subnet_route_table_ids[0],
   ]
   cidr_blocks = [
-    local.private_vpc_cidr_block,
-    local.public_vpc_cidr_block,
     local.private_vpc_isolated_subnet_cidr_block,
-    local.public_vpc_private_subnet_cidr_blocks[0]
+    local.public_vpc_public_subnet_cidr_blocks[1],
+    local.private_vpc_isolated_subnet_cidr_block,
+    local.public_vpc_private_subnet_cidr_blocks[0],
   ]
 
   tags = local.tags
