@@ -10,6 +10,10 @@ The second VPC should be able to ping one of the private subnets of the first VP
 
 ![architecture](./diagrams/architecture.drawio.png "Architecture")
 
+The VPC and subnet CIDR blocks are automatically generated, see **cidr_block_spec** and **cidr_block_increment** variables usage in the [locals](./src/locals.tf) file.
+
+Each VPC CIDR block is divided in two ranges, the first one for public subnets and the second half for private subnets.
+
 ## Usage
 
 ```bash
