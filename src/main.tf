@@ -61,7 +61,7 @@ module "private_ec2" {
   name_suffix   = "private"
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  subnet_id     = module.public_vpc.private_subnet_ids[1]
+  subnet_id     = module.public_vpc.private_subnet_ids[0]
 
   tags = local.tags
 }
