@@ -28,3 +28,9 @@ terraform apply -var public_key_path=key.pub -var inbound_cidr_block="0.0.0.0/0"
 ssh-keygen -t rsa -b 2048 -f <key>
 scp -i <key> <file> ubuntu@<ip>:~/
 ```
+
+## Checks
+
+```bash
+tcpdump -ni any icmp
+```
